@@ -6,6 +6,7 @@ import { swaggerSetup } from './swagger.js'; // Import Swagger setup
 import apiRouter from './routes/exampleRoute.js'; // Import API routes
 import dotenv from 'dotenv'; // Import dotenv for environment variables
 import standardizedResponse from './middlewares/standardResponse.js'; // Import custom response middleware
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 dotenv.config(); // Load environment variables
 
@@ -30,7 +31,12 @@ swaggerSetup(app);
 // Connect to MongoDB
 let mongoURI =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/microservice';
-if (process.env.NODE_ENV === 'test') mongoURI += '-test';
+if (process.env.NODE_ENV === 'test') {
+  const mongod = new MongoMemoryServer(); // Fake MongoDB for testing
+  await mongod.start();
+  mongoURI = mongod.getUri();
+  console.log(mongoURI);
+}
 
 mongoose
   .connect(mongoURI)

@@ -5,15 +5,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      mongo:
-        image: mongo:latest
-        ports:
-          - 27017:27017
-        options: >-
-          --health-interval 30s
-          --health-timeout 15s
-          --health-retries 10
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
