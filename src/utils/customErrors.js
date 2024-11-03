@@ -20,8 +20,14 @@ class AppError extends Error {
 
 // Common error examples
 export class NotFoundError extends AppError {
-  constructor(message = 'Resource not found', appCode = 'NOT_FOUND') {
-    super(message, 404, null, appCode);
+  constructor(message = 'Resource not found', details, appCode = 'NOT_FOUND') {
+    super(message, 404, details, appCode);
+  }
+}
+
+export class BadRequestError extends AppError {
+  constructor(message = 'Bad request', details, appCode = 'BAD_REQUEST') {
+    super(message, 400, details, appCode);
   }
 }
 

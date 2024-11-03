@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 import { ValidationError } from '../utils/customErrors.js';
 
 // Validation middleware for ExampleModel
@@ -28,12 +28,12 @@ export const validateExample = [
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        // Return the default error messages directly
         throw new ValidationError('Validation failed', errors.array());
       }
       next();
     } catch (error) {
-      next(error);
+      res.sendError(new ValidationError('An error occurred while validating', [error]));
+      next();
     }
   },
 ];

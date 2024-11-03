@@ -1,40 +1,60 @@
 import ExampleModel from '../models/exampleModel.js';
-import { NotFoundError } from '../utils/customErrors.js';
+import { NotFoundError, BadRequestError } from '../utils/customErrors.js';
 
 export const getAllExamples = async () => {
-  return await ExampleModel.find({});
+  try {
+    return await ExampleModel.find({});
+  } catch (error) {
+    throw new BadRequestError('Error fetching examples', error);
+  }
 };
 
 export const createExample = async (data) => {
-  const newExample = new ExampleModel(data);
-  return await newExample.save();
+  try {
+    const newExample = new ExampleModel(data);
+    return await newExample.save();
+  } catch (error) {
+    throw new BadRequestError('Error creating example', error);
+  }
 };
 
 export const getExampleById = async (id) => {
-  const example = await ExampleModel.findById(id);
-  if (!example) {
-    throw new NotFoundError('Example not found');
+  try {
+    const example = await ExampleModel.findById(id);
+    if (!example) {
+      throw new NotFoundError('Example not found');
+    }
+    return example;
+  } catch (error) {
+    throw new NotFoundError('Error fetching example by ID', error);
   }
-  return example;
 };
 
 export const updateExample = async (id, data) => {
-  const updatedExample = await ExampleModel.findByIdAndUpdate(id, data, {
-    new: true,
-    runValidators: true,
-  });
-  if (!updatedExample) {
-    throw new NotFoundError('Example not found');
+  try {
+    const updatedExample = await ExampleModel.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedExample) {
+      throw new NotFoundError('Example not found');
+    }
+    return updatedExample;
+  } catch (error) {
+    throw new NotFoundError('Error updating example', error);
   }
-  return updatedExample;
 };
 
 export const deleteExample = async (id) => {
-  const deletedExample = await ExampleModel.findByIdAndDelete(id);
-  if (!deletedExample) {
-    throw new NotFoundError('Example not found');
+  try {
+    const deletedExample = await ExampleModel.findByIdAndDelete(id);
+    if (!deletedExample) {
+      throw new NotFoundError('Example not found');
+    }
+    return deletedExample;
+  } catch (error) {
+    throw new NotFoundError('Error deleting example', error);
   }
-  return deletedExample;
 };
 
 export default {

@@ -19,7 +19,7 @@ const standardResponseMiddleware = (req, res, next) => {
   // Improved custom error response method
   res.sendError = (error) => {
     // Default to 400 status for unexpected errors
-    console.error(error);
+    if (process.env.DEBUG === 'true') console.error(error);
     let statusCode = error.statusCode || 400;
     let responseStatus = statusCode === 400 ? 'failed' : 'error';
     let message = 'An unexpected error occurred';
